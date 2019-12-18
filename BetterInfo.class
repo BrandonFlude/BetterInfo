@@ -1,0 +1,596 @@
+package me.brandonflude.azier;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+
+public class BetterInfo
+  extends JavaPlugin
+{
+  String version = "1.2";
+
+  
+  public void onEnable() {
+    loadConfiguration();
+    getLogger().info("BetterInfo Minecraft Plugin v" + this.version + " by azier has been enabled.");
+  }
+
+
+  
+  public void onDisable() { getLogger().info("BetterInfo Minecraft Plugin v" + this.version + " by azier has been disabled."); }
+
+  
+  public void loadConfiguration() {
+    String servername = "Configuration.ServerName";
+    getConfig().addDefault(servername, "Your Server Name");
+    
+    String prefix = "Configuration.Design.Prefix";
+    getConfig().addDefault(prefix, "&3[BetterInfo]");
+    
+    String website = "Configuration.Website.Info";
+    getConfig().addDefault(website, "&dhttp://yourwebsite.com");
+    String websiteEnable = "Configuration.Website.Enabled";
+    getConfig().addDefault(websiteEnable, Boolean.valueOf(true));
+    String websiteError = "Configuration.Website.Disabled";
+    getConfig().addDefault(websiteError, "&cA custom URL has not been set.");
+    
+    String youtube = "Configuration.Youtube.Info";
+    getConfig().addDefault(youtube, "&dYour Youtube");
+    String youtubeEnable = "Configuration.Youtube.Enabled";
+    getConfig().addDefault(youtubeEnable, Boolean.valueOf(true));
+    String youtubeError = "Configuration.Youtube.Disabled";
+    getConfig().addDefault(youtubeError, "&cA custom URL has not been set.");
+    
+    String ping = "Configuration.Ping.Info";
+    getConfig().addDefault(ping, "&dPong!");
+    String pingEnable = "Configuration.Ping.Enabled";
+    getConfig().addDefault(pingEnable, Boolean.valueOf(true));
+    String pingError = "Configuration.Ping.Disabled";
+    getConfig().addDefault(pingError, "&cA custom ping message has not been set.");
+    
+    String donate = "Configuration.Donate.Info";
+    getConfig().addDefault(donate, "&dDonation Link");
+    String donateEnable = "Configuration.Donate.Enabled";
+    getConfig().addDefault(donateEnable, Boolean.valueOf(true));
+    String donateError = "Configuration.Donate.Disabled";
+    getConfig().addDefault(donateError, "&cA custom URL has not been set.");
+    
+    String twitter = "Configuration.Twitter.Info";
+    getConfig().addDefault(twitter, "&dTwitter Link");
+    String twitterEnable = "Configuration.Twitter.Enabled";
+    getConfig().addDefault(twitterEnable, Boolean.valueOf(true));
+    String twitterError = "Configuration.Twitter.Disabled";
+    getConfig().addDefault(twitterError, "&cA custom URL has not been set.");
+    
+    getConfig().options().copyDefaults(true);
+    saveConfig();
+  }
+
+  
+  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    if (cmd.getName().equalsIgnoreCase("website") && sender instanceof Player) {
+      Player player = (Player)sender;
+      if (args.length == 0) {
+        if (getConfig().getBoolean("Configuration.Website.Enabled", true)) {
+          String string = getConfig().getString("Configuration.Website.Info");
+          String prefix = getConfig().getString("Configuration.Design.Prefix");
+          player.sendMessage(String.valueOf(ChatColor.translateAlternateColorCodes('&', prefix)) + " " + ChatColor.translateAlternateColorCodes('&', string));
+          return true;
+        } 
+        String error = getConfig().getString("Configuration.Website.Disabled");
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', error));
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("set")) {
+        if (player.hasPermission("betterinfo.website.edit")) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Website.Info", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Website URL Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /website set www.google.com");
+          return true;
+        } 
+        
+        if (player.isOp()) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Website.Info", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Website URL Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /website set www.google.com");
+          return true;
+        } 
+        
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+
+      
+      if (args[0].equalsIgnoreCase("enable")) {
+        if (player.isOp()) {
+          getConfig().set("Configuration.Website.Enabled", Boolean.valueOf(true));
+          saveConfig();
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Enabled.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("disable")) {
+        if (player.isOp()) {
+          getConfig().set("Configuration.Website.Enabled", Boolean.valueOf(false));
+          saveConfig();
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Disabled.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      return true;
+    } 
+
+
+    
+    if (cmd.getName().equalsIgnoreCase("ping") && sender instanceof Player) {
+      Player player = (Player)sender;
+      if (args.length == 0) {
+        if (getConfig().getBoolean("Configuration.Ping.Enabled", true)) {
+          String string = getConfig().getString("Configuration.Ping.Info");
+          String prefix = getConfig().getString("Configuration.Design.Prefix");
+          player.sendMessage(String.valueOf(ChatColor.translateAlternateColorCodes('&', prefix)) + " " + ChatColor.translateAlternateColorCodes('&', string));
+          return true;
+        } 
+        String error = getConfig().getString("Configuration.Ping.Disabled");
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', error));
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("set")) {
+        if (player.hasPermission("betterinfo.ping.edit")) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Ping.Info", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Ping Message Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /ping set Pong!");
+          return true;
+        } 
+        
+        if (player.isOp()) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Ping.Info", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Ping Message Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /ping set Pong!");
+          return true;
+        } 
+        
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+
+      
+      if (args[0].equalsIgnoreCase("enable")) {
+        if (player.isOp()) {
+          getConfig().set("Configuration.Ping.Enabled", Boolean.valueOf(true));
+          saveConfig();
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Enabled.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("disable")) {
+        if (player.isOp()) {
+          getConfig().set("Configuration.Ping.Enabled", Boolean.valueOf(false));
+          saveConfig();
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Disabled.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      return true;
+    } 
+
+
+    
+    if (cmd.getName().equalsIgnoreCase("youtube") && sender instanceof Player) {
+      Player player = (Player)sender;
+      if (args.length == 0) {
+        if (getConfig().getBoolean("Configuration.Youtube.Enabled", true)) {
+          String string = getConfig().getString("Configuration.Youtube.Info");
+          String prefix = getConfig().getString("Configuration.Design.Prefix");
+          player.sendMessage(String.valueOf(ChatColor.translateAlternateColorCodes('&', prefix)) + " " + ChatColor.translateAlternateColorCodes('&', string));
+          return true;
+        } 
+        String error = getConfig().getString("Configuration.Youtube.Disabled");
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', error));
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("set")) {
+        if (player.hasPermission("betterinfo.youtube.edit")) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Youtube.Info", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Youtube URL Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /youtube set www.youtube.com/user");
+          return true;
+        } 
+        
+        if (player.isOp()) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Youtube.Info", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Youtube URL Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /youtube set www.youtube.com/user");
+          return true;
+        } 
+        
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+
+      
+      if (args[0].equalsIgnoreCase("enable")) {
+        if (player.isOp()) {
+          getConfig().set("Configuration.Youtube.Enabled", Boolean.valueOf(true));
+          saveConfig();
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Enabled.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("disable")) {
+        if (player.isOp()) {
+          getConfig().set("Configuration.Youtube.Enabled", Boolean.valueOf(false));
+          saveConfig();
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Disabled.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      return true;
+    } 
+
+
+    
+    if (cmd.getName().equalsIgnoreCase("donate") && sender instanceof Player) {
+      Player player = (Player)sender;
+      if (args.length == 0) {
+        if (getConfig().getBoolean("Configuration.Donate.Enabled", true)) {
+          String string = getConfig().getString("Configuration.Donate.Info");
+          String prefix = getConfig().getString("Configuration.Design.Prefix");
+          player.sendMessage(String.valueOf(ChatColor.translateAlternateColorCodes('&', prefix)) + " " + ChatColor.translateAlternateColorCodes('&', string));
+          return true;
+        } 
+        String error = getConfig().getString("Configuration.Donate.Disabled");
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', error));
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("set")) {
+        if (player.hasPermission("betterinfo.donate.edit")) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Donate.Info", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Donate URL Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /donate set www.donate.com");
+          return true;
+        } 
+        
+        if (player.isOp()) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Donate.Info", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Donate URL Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /donate set www.donate.com");
+          return true;
+        } 
+        
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+
+      
+      if (args[0].equalsIgnoreCase("enable")) {
+        if (player.isOp()) {
+          getConfig().set("Configuration.Donate.Enabled", Boolean.valueOf(true));
+          saveConfig();
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Enabled.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("disable")) {
+        if (player.isOp()) {
+          getConfig().set("Configuration.Donate.Enabled", Boolean.valueOf(false));
+          saveConfig();
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Disabled.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      return true;
+    } 
+
+
+
+    
+    if (cmd.getName().equalsIgnoreCase("twitter") && sender instanceof Player) {
+      Player player = (Player)sender;
+      if (args.length == 0) {
+        if (getConfig().getBoolean("Configuration.Twitter.Enabled", true)) {
+          String string = getConfig().getString("Configuration.Twitter.Info");
+          String prefix = getConfig().getString("Configuration.Design.Prefix");
+          player.sendMessage(String.valueOf(ChatColor.translateAlternateColorCodes('&', prefix)) + " " + ChatColor.translateAlternateColorCodes('&', string));
+          return true;
+        } 
+        String error = getConfig().getString("Configuration.Twitter.Disabled");
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', error));
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("set")) {
+        if (player.hasPermission("betterinfo.twitter.edit")) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Twitter.Info", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Twitter URL Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /twitter set @SirAzier");
+          return true;
+        } 
+        
+        if (player.isOp()) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Twitter.Info", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Twitter URL Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /twitter set @SirAzier");
+          return true;
+        } 
+        
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+
+      
+      if (args[0].equalsIgnoreCase("enable")) {
+        if (player.isOp()) {
+          getConfig().set("Configuration.Twitter.Enabled", Boolean.valueOf(true));
+          saveConfig();
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Enabled.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("disable")) {
+        if (player.isOp()) {
+          getConfig().set("Configuration.Twitter.Enabled", Boolean.valueOf(false));
+          saveConfig();
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Disabled.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      return true;
+    } 
+
+
+
+    
+    if (cmd.getName().equalsIgnoreCase("betterinfo")) {
+      Player player = (Player)sender;
+      if (args.length == 0) {
+        player.sendMessage(ChatColor.DARK_RED + "-----------------------------------------------------");
+        player.sendMessage(ChatColor.DARK_AQUA + "BetterInfo Minecraft Plugin v" + this.version + " by azier.");
+        player.sendMessage(ChatColor.DARK_AQUA + "Use " + ChatColor.DARK_PURPLE + "/betterinfo help" + ChatColor.DARK_AQUA + " for commands.");
+        player.sendMessage(ChatColor.DARK_RED + "-----------------------------------------------------");
+        return true;
+      } 
+      if (args[0].equalsIgnoreCase("help")) {
+        player.sendMessage(ChatColor.DARK_RED + "-----------------------------------------------------");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "Commands:");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "/betterinfo" + ChatColor.DARK_AQUA + " - Show the plugin screen.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "/betterinfo help" + ChatColor.DARK_AQUA + " - Show the help screen.");
+        if (player.isOp()) {
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "/<command> set [info]" + ChatColor.DARK_AQUA + " - Set the message to be shown.");
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "/<command> [enable|disable]" + ChatColor.DARK_AQUA + " - Enable or Disable a feature.");
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "/betterinfo reload" + ChatColor.DARK_AQUA + " - Reload the plugin.");
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "/betterinfo perms" + ChatColor.DARK_AQUA + " - View Permissions.");
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "/prefix" + ChatColor.DARK_AQUA + " - View the current prefix.");
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "/prefix set" + ChatColor.DARK_AQUA + " - Update the prefix.");
+        } 
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "/website" + ChatColor.DARK_AQUA + " - Show the website URL.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "/youtube" + ChatColor.DARK_AQUA + " - Show the youtube URL.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "/donate" + ChatColor.DARK_AQUA + " - Show the donate URL.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "/twitter" + ChatColor.DARK_AQUA + " - Show the twitter URL.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "/ping" + ChatColor.DARK_AQUA + " - Test your ping.");
+        player.sendMessage(ChatColor.DARK_RED + "-----------------------------------------------------");
+        return true;
+      } 
+      if (args[0].equalsIgnoreCase("reload") && 
+        player.isOp()) {
+        reloadConfig();
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "BetterInfo Minecraft Plugin reloaded.");
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("perms") && 
+        player.isOp()) {
+        player.sendMessage(ChatColor.DARK_RED + "-----------------------------------------------------");
+        player.sendMessage(ChatColor.DARK_AQUA + "BetterInfo Minecraft Plugin v" + this.version + " by azier.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "Commands:");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "betterinfo.website.edit" + ChatColor.DARK_AQUA + " - Allow user to edit the website.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "betterinfo.youtube.edit" + ChatColor.DARK_AQUA + " - Allow user to edit the youtube URL.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "betterinfo.donate.edit" + ChatColor.DARK_AQUA + " - Allow user to edit the donation URL.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "betterinfo.twitter.edit" + ChatColor.DARK_AQUA + " - Allow user to edit the twitter URL.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "betterinfo.ping.edit" + ChatColor.DARK_AQUA + " - Allow user to edit the ping response.");
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "betterinfo.prefix.edit" + ChatColor.DARK_AQUA + " - Allow user to edit the prefix.");
+        player.sendMessage(ChatColor.DARK_RED + "-----------------------------------------------------");
+        return true;
+      } 
+
+      
+      return true;
+    } 
+
+    
+    if (cmd.getName().equalsIgnoreCase("prefix")) {
+      Player player = (Player)sender;
+      if (args.length == 0) {
+        if (player.isOp()) {
+          String prefix = getConfig().getString("Configuration.Design.Prefix");
+          player.sendMessage(ChatColor.LIGHT_PURPLE + "Current Prefix: " + ChatColor.translateAlternateColorCodes('&', prefix));
+          player.sendMessage(ChatColor.RED + "Use /prefix set <newprefix> to change it.");
+          return true;
+        } 
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+      
+      if (args[0].equalsIgnoreCase("set")) {
+        if (player.hasPermission("betterinfo.prefix.edit")) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Design.Prefix", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Prefix Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /prefix set [Prefix]");
+          return true;
+        } 
+        
+        if (player.isOp()) {
+          if (args.length > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+              sb.append(args[i]).append(" ");
+            }
+            String allArgs = sb.toString().trim();
+            getConfig().set("Configuration.Design.Prefix", allArgs);
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "Prefix Updated.");
+            saveConfig();
+            return true;
+          } 
+          player.sendMessage(ChatColor.RED + "You need to specify the information.");
+          player.sendMessage(ChatColor.RED + "Usage: /prefix set [Prefix]");
+          return true;
+        } 
+        
+        player.sendMessage(ChatColor.RED + "You do not have permission to run this command.");
+        return true;
+      } 
+
+
+      
+      return true;
+    } 
+    return false;
+  }
+}
