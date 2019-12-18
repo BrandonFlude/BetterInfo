@@ -1,0 +1,25 @@
+name: BetterInfo
+main: me.brandonflude.azier.BetterInfo
+version: 1.2
+commands:
+  betterinfo:
+    description: Returns the info.
+    usage: /<command> [set|enable|disable]
+  website:
+    description: Returns the URL for your website.
+    usage: /<command> [set|enable|disable]
+  ping:
+    description: Returns the ping message.
+    usage: /<command> [set|enable|disable]
+  youtube:
+    description: Returns the URL/Channel name for YouTube.
+    usage: /<command> [set|enable|disable]
+  donate:
+    description: Returns the donation URL.
+    usage: /<command> [set|enable|disable]
+  twitter:
+    description: Returns the twitter URL.
+    usage: /<command> [set|enable|disable]
+  prefix:
+    description: View and update the prefix.
+    usage: /<command> [set]
